@@ -1,0 +1,19 @@
+{% if error_message %}
+<p>
+    <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
+<form action="{% url 'lists:create_list'%}" method='POST'>
+    {% csrf_token %}
+    <h1>List name: <input type="text" name="name" value=""/></h1>
+    <h1>Budget: <input type="number" name="budget" value=""/></h1>
+    <h1>Tag 
+        <select name="tag_id" id="tag_id">
+            {% for tag in tags %}
+                <option value='{{tag.pk}}'>{{tag.name}}</option>
+            {% endfor %}
+        </select>
+    </h1>
+    <a href="{% url 'lists:index' %}">aa</a>
+    <input type="submit" value="Create list"/>
+</form>

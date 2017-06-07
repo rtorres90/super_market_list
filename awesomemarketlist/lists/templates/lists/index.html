@@ -1,0 +1,14 @@
+<h1>Lists</h1>
+{% for list in object_list%}
+    <a href="{% url 'lists:detail' list.id %}">
+        <h2>List {{list.name}}</h2>
+    </a>
+    
+    <ul>
+    {% for item in list.item_set.all%}
+        <li>{{item.name}}</li>
+    {% endfor %}
+    </ul>
+
+{% endfor %}
+<a href="{% url 'lists:new_list' %}">Create new list</a>

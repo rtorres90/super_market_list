@@ -1,0 +1,12 @@
+{% if error_message %}
+<p>
+    <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
+<form action="{% url 'lists:update' list.id %}" method='POST'>
+    {% csrf_token %}
+    <h1>List name: <input type="text" name="name" value="{{list.name}}"/></h1>
+    <h1>Budget: <input type="number" name="budget" value="{{list.budget}}"/></h1>
+    <a href="{% url 'lists:index' %}">aa</a>
+    <input type="submit" value="Save changes"/>
+</form>
