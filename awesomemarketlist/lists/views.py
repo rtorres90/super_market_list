@@ -5,6 +5,7 @@ from django.views import generic
 # Create your views here.
 
 from .models import List, Tag
+from .forms import ListForm
 
 class IndexView(generic.ListView):
     template_name = 'lists/index.html'
@@ -29,13 +30,13 @@ def update(request, list_id):
     })
     
 def new_list(request):
-    tags = Tag.objects.all()
-    return render(request, 'lists/new_list.html', {'tags': tags})
+    form = ListForm
+    return render(request, 'lists/new_list.html', {'form': form})
     
 def create_list(request):
-    tag = Tag.objects.get(pk=request.POST['tag_id'])
-    new_list = List(name=request.POST['name'], budget=request.POST['budget'], tag=tag)
-    new_list.save()
+    form = ListForm(request.POST)
+    if form.is_valid():
+        form.save(commit=True)
     
     return HttpResponseRedirect(reverse('lists:index'))
     

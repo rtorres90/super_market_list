@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 {% if error_message %}
 <p>
     <strong>{{ error_message }}</strong>
@@ -10,3 +13,4 @@
     <a href="{% url 'lists:index' %}">aa</a>
     <input type="submit" value="Save changes"/>
 </form>
+{% endblock %}
