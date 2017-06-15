@@ -10,13 +10,25 @@
     {% csrf_token %}
     <h1>List name: <input type="text" name="name" value="{{list.name}}"/></h1>
     <h1>Budget: <input type="number" name="budget" value="{{list.budget}}"/></h1>
-    <ul id='item_list'>
+    <div id='item_list'>
     {% for item in list.item_set.all %}
-        <li>{{item.name}}</li>
+        <div class='item'>
+            Name: <input type='text' class='item_name' value='{{item.name}}' onkeyup='activate_save_button(this)'/>
+            Quantity: <input type='number' class='item_quantity' value='{{item.quantity}}' onkeyup='activate_save_button(this)'/>
+            Price: <input type='number' class='item_price' value='{{item.price}}' onkeyup='activate_save_button(this)'/>
+            <button class='save_button' onclick='save_item(this);' style='display:none;'>Save changes!</button>
+        </div>
     {% endfor %}
-        <li id='item_template' style="display:none;"></li>
-    </ul>
-    <a id='new_item'>new item</a>
+    </div>
+        <div id='item_template' style="display:none;" class='item'>
+            Name: <input type='text' class='item_name' placeholder='item name' onkeyup='activate_save_button(this)'/>
+            Quantity: <input type='number' class='item_quantity' placeholder='item quantity' value='1' onkeyup='activate_save_button(this)'/>
+            Price: <input type='number' class='item_price' placeholder='item price' value='0' onkeyup='activate_save_button(this)'/>
+            <button class='save_button' onclick='save_item(this);' style='display:none;'>Save changes!</button>
+        </div>
+    <div><h3>Total: </h3><h3 id='total'>0</h3></div>
+    <a onclick='update_total();'>Calculate!</a>
+    <a id='new_item'>New item</a>
     <a href="{% url 'lists:index' %}">Go to main page</a>
     <input type="submit" value="Save changes"/>
 </form>
