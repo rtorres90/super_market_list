@@ -2,19 +2,29 @@ from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views import generic
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 from .models import List, Tag
-from .forms import ListForm
+from .forms import ListForm, LoginForm
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'lists/index.html'
     model = List
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
     
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
     model = List
     template_name = 'lists/detail.html'
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
 
+@login_required(login_url='/login/')
 def update(request, list_id):
     list = get_object_or_404(List, pk=list_id)
     try:
@@ -28,15 +38,47 @@ def update(request, list_id):
         'list': list,
         'error_message': error_message,
     })
-    
+
+@login_required(login_url='/login/')
 def new_list(request):
     form = ListForm
     return render(request, 'lists/new_list.html', {'form': form})
     
+@login_required(login_url='/login/')
 def create_list(request):
     form = ListForm(request.POST)
     if form.is_valid():
-        form.save(commit=True)
-    
+        new_list = form.save(commit=False)
+        new_list.user = request.user
+        new_list.save()
     return HttpResponseRedirect(reverse('lists:index'))
+
+@login_required(login_url='/login/')
+def profile(request, username):
+    user = User.objects.get(username=username)
+    lists = List.objects.filter(user=user)
+    return render(request, 'profile.html',
+    {'username': username,
+    'lists': lists})
     
+def login_view(request):
+    if request.user.is_authenticated():
+        return profile(request, request.user.username)
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=user, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect('/')
+        return render(request, 'login.html', {'form': form, 'error_message': 'Wrong username or password'})
+    else:
+        form = LoginForm()
+        return render(request, 'login.html', {'form': form})
+        
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')

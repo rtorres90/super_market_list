@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from lists import views
 
 urlpatterns = [
+    url(r'^user/(\w+)/$', views.profile),
+    url(r'^login/$', views.login_view),
+    url(r'^logout/$', views.logout_view),
     url(r'^admin/', admin.site.urls),
     url(r'^lists/', include('lists.urls')),
+    url(r'^$', views.IndexView.as_view()),
 ]

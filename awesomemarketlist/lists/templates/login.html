@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+{% if error_message %}
+<h2>{{error_message}}</h2>
+{% endif %}
+<h1>Login</h1>
+    <form method="post" action=".">
+     {% csrf_token %}
+     {{ form.as_p }}
+     <input type="submit" value="Submit" />
+</form>
+{% endblock %}

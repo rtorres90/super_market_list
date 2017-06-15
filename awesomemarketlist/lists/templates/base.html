@@ -45,12 +45,18 @@
                     <li>
                         <a class="page-scroll" href="{% url 'lists:index' %}">Lists</a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li>
-                        <a class="page-scroll" href="#services">Services</a>
+                        <a class="page-scroll" href="/user/">{{user.username}}</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
+                        <a class="page-scroll" href="/logout/">Logout</a>
                     </li>
+                    {% else %}
+                    <li>
+                        <a class="page-scroll" href="/login/">Login</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -66,6 +72,7 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 </body>
 
 </html>

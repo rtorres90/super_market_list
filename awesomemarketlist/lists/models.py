@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import User
 from django.db import models
 
 class Tag(models.Model):
@@ -13,6 +14,7 @@ class List(models.Model):
     name = models.CharField(max_length=20)
     budget = models.IntegerField(default=0)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    user = models.ForeignKey(User)
     
     def rename_list(self, list_name):
         self.name = list_name

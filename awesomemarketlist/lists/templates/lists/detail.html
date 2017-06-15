@@ -10,7 +10,14 @@
     {% csrf_token %}
     <h1>List name: <input type="text" name="name" value="{{list.name}}"/></h1>
     <h1>Budget: <input type="number" name="budget" value="{{list.budget}}"/></h1>
-    <a href="{% url 'lists:index' %}">aa</a>
+    <ul id='item_list'>
+    {% for item in list.item_set.all %}
+        <li>{{item.name}}</li>
+    {% endfor %}
+        <li id='item_template' style="display:none;"></li>
+    </ul>
+    <a id='new_item'>new item</a>
+    <a href="{% url 'lists:index' %}">Go to main page</a>
     <input type="submit" value="Save changes"/>
 </form>
 {% endblock %}
