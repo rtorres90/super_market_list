@@ -105,4 +105,4 @@ def save_item(request):
         item_to_update.price = item_price
         item_to_update.save()
 
-    return HttpResponse("{'item_id': %s}" % item_id)
+    return HttpResponse("""{"item_id": %s}""" % item_id)

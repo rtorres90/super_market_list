@@ -6,15 +6,15 @@ $("#new_item").click(function(event){
 
 $('body').ready(update_total());
 
-function save_item(button){
+function save_item(item_element){
    event.preventDefault();
    let list_id = $('#list_id').val();
-   let item_container = $(button).parent();
+   let item_container = $(item_element).parent();
    let item_id = item_container.find(".item_id").val();
+   let item_id_element = item_container.find(".item_id");
    let item_name = item_container.find(".item_name").val();
    let item_quantity = item_container.find(".item_quantity").val();
    let item_price = item_container.find(".item_price").val();
-   $(button).hide();
    
    $.ajax({
         url : '/lists/save_item/',
@@ -28,15 +28,18 @@ function save_item(button){
         },
 
         success : function(data){
-            console.log(data);
+            if (item_id == '0'){
+                response = JSON.parse(data);
+                new_id = response['item_id'];
+                item_id_element.val(new_id);
+                console.log("New item saved!");
+            }else{
+                console.log("Item updated!");
+            }
+            
+            
         }
     });
-}
-
-function activate_save_button(input) {
-   event.preventDefault();
-   let item_container = $(input).parent();
-   item_container.find(".save_button").show();
 }
 
 function update_total(){
