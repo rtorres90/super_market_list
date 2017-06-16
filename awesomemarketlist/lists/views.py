@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-from .models import List, Tag
+from .models import List, Tag, Item
 from .forms import ListForm, LoginForm
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -82,3 +82,27 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
+    
+def save_item(request):
+    list_id = int(request.POST.get('list_id', None))
+    item_id = int(request.POST.get('item_id', None))
+    item_name = request.POST.get('item_name', None)
+    item_quantity = int(request.POST.get('item_quantity', None))
+    item_price = int(request.POST.get('item_price', None))
+
+    parent_list = List.objects.get(pk=list_id)
+    
+    print item_id
+    
+    if not item_id:
+        new_item = Item(name=item_name, quantity=item_quantity, price=item_price, parent_list=parent_list)
+        new_item.save()
+        item_id = new_item.id
+    else:
+        item_to_update = Item.objects.get(pk=item_id)
+        item_to_update.name = item_name
+        item_to_update.quantity = item_quantity
+        item_to_update.price = item_price
+        item_to_update.save()
+
+    return HttpResponse("{'item_id': %s}" % item_id)

@@ -7,12 +7,14 @@
 </p>
 {% endif %}
 <form action="{% url 'lists:update' list.id %}" method='POST'>
+    <input type="hidden" id="list_id" value='{{list.id}}'/>
     {% csrf_token %}
     <h1>List name: <input type="text" name="name" value="{{list.name}}"/></h1>
     <h1>Budget: <input type="number" name="budget" value="{{list.budget}}"/></h1>
     <div id='item_list'>
     {% for item in list.item_set.all %}
         <div class='item'>
+            <input type="hidden" class="item_id" value='{{item.id}}'/>
             Name: <input type='text' class='item_name' value='{{item.name}}' onkeyup='activate_save_button(this)'/>
             Quantity: <input type='number' class='item_quantity' value='{{item.quantity}}' onkeyup='activate_save_button(this)'/>
             Price: <input type='number' class='item_price' value='{{item.price}}' onkeyup='activate_save_button(this)'/>
@@ -21,6 +23,7 @@
     {% endfor %}
     </div>
         <div id='item_template' style="display:none;" class='item'>
+            <input type="hidden" class="item_id" value='0'/>
             Name: <input type='text' class='item_name' placeholder='item name' onkeyup='activate_save_button(this)'/>
             Quantity: <input type='number' class='item_quantity' placeholder='item quantity' value='1' onkeyup='activate_save_button(this)'/>
             Price: <input type='number' class='item_price' placeholder='item price' value='0' onkeyup='activate_save_button(this)'/>
