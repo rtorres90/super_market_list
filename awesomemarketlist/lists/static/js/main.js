@@ -9,7 +9,7 @@ $('body').ready(update_total());
 function save_item(item_element){
    event.preventDefault();
    let list_id = $('#list_id').val();
-   let item_container = $(item_element).parent();
+   let item_container = $(item_element).parent().parent();
    let item_id = item_container.find(".item_id").val();
    let item_id_element = item_container.find(".item_id");
    let item_name = item_container.find(".item_name").val();
@@ -45,10 +45,13 @@ function save_item(item_element){
 function update_total(){
    let total = 0;
    $('.item').each(function(){
-      total += parseInt($(this).find('.item_quantity').val()) * parseInt($(this).find('.item_price').val()); 
+      item_total = parseInt($(this).find('.item_quantity').val()) * parseInt($(this).find('.item_price').val());
+      $(this).find('.item_total').val(item_total);
+      total +=  item_total;
    });
-   console.log(total);
-   $("#total").html(total);
+   $("#expenses").html(total);
+   let budget = parseInt($("#budget").val());
+   $("#left").html(budget - total);
 }
 
 // You need these methods to add the CSRF token using jQuery

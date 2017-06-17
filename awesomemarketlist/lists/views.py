@@ -18,11 +18,21 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
     
+    def get_queryset(self):
+        user = self.request.user
+        return List.objects.filter(user=user)
+
+        
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = List
     template_name = 'lists/detail.html'
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
+    
+    def get_object(self):
+        user = self.request.user
+        pk = self.kwargs['pk']
+        return List.objects.get(user=user, pk=pk)
 
 @login_required(login_url='/login/')
 def update(request, list_id):

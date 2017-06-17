@@ -2,35 +2,86 @@
 
 {% block content %}
 {% if error_message %}
-<p>
-    <strong>{{ error_message }}</strong>
-</p>
+<div class='container-fluid'>
+<div class='row'>
+    <h1>
+        <strong>{{ error_message }}</strong>
+    </h1>
+</div>
 {% endif %}
 <form action="{% url 'lists:update' list.id %}" method='POST'>
     <input type="hidden" id="list_id" value='{{list.id}}'/>
     {% csrf_token %}
-    <h1>List name: <input type="text" name="name" value="{{list.name}}"/></h1>
-    <h1>Budget: <input type="number" name="budget" value="{{list.budget}}"/></h1>
+    <div class='row'>
+        <div class='form-group col-md-6 col-xs-6'>
+            <label>List name: </label><input type="text" id='name' name="name" class='form-control'value="{{list.name}}"/>
+        </div>
+        <div class='form-group col-md-6 col-xs-6'>
+            <label>Budget: </label> <input type="number" id='budget' name="budget" class='form-control' value="{{list.budget}}"/></h1>
+        </div>
+    </div>
     <div id='item_list'>
     {% for item in list.item_set.all %}
-        <div class='item'>
+        <div class='item row'>
             <input type="hidden" class="item_id" value='{{item.id}}'/>
-            Name: <input type='text' class='item_name' value='{{item.name}}' onchange='save_item(this);'/>
-            Quantity: <input type='number' class='item_quantity' value='{{item.quantity}}' onchange='save_item(this);' onkeyup='update_total();'/>
-            Price: <input type='number' class='item_price' value='{{item.price}}' onchange='save_item(this);' onkeyup='update_total();'/>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Name: </label><input type='text' class='item_name form-control' value='{{item.name}}' onchange='save_item(this);'/>
+            </div>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Quantity: </label><input type='number' class='item_quantity form-control' value='{{item.quantity}}' onchange='save_item(this);' onkeyup='update_total();'/>
+            </div>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Price: </label><input type='number' class='item_price form-control' value='{{item.price}}' onchange='save_item(this);' onkeyup='update_total();'/>
+            </div>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Total:</label> <input type="text" class='item_total form-control' disabled='disabled' value="0"/>
+            </div>
         </div>
     {% endfor %}
+    
+    </div>
+    <div class='row'>
+        <div class='col-md-2 col-xs-4 col-sm-4'>
+            <button id='new_item' class='btn btn-info form-control'>New item</button>
+        </div>
     </div>
         <div id='item_template' style="display:none;" class='item'>
             <input type="hidden" class="item_id" value='0'/>
-            Name: <input type='text' class='item_name' placeholder='item name' onchange='save_item(this);'/>
-            Quantity: <input type='number' class='item_quantity' placeholder='item quantity' value='1' onchange='save_item(this);' onkeyup='update_total();'/>
-            Price: <input type='number' class='item_price' placeholder='item price' value='0' onchange='save_item(this);' onkeyup='update_total();'/>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Name: </label><input type='text' class='item_name form-control' onchange='save_item(this);'/>
+            </div>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Quantity: </label><input type='number' class='item_quantity form-control' value='1' onchange='save_item(this);' onkeyup='update_total();'/>
+            </div>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Price: </label><input type='number' class='item_price form-control' value='0' onchange='save_item(this);' onkeyup='update_total();'/>
+            </div>
+            <div class='form-group col-md-3 col-sm-3 col-xs-3'>
+                <label>Total:</label> <input type="text" class='item_total form-control' disabled='disabled' value="0"/>
+            </div>
         </div>
-    <div><h3>Total: </h3><h3 id='total'>0</h3></div>
-    <a onclick='update_total();'>Calculate!</a>
-    <a id='new_item'>New item</a>
-    <a href="{% url 'lists:index' %}">Go to main page</a>
-    <input type="submit" value="Save changes"/>
+    <div class='row'>
+        <div class='col-md-3 col-sm-3 col-xs-3'>
+            <label><h3>Total: </h3></label>
+        </div>
+        <div class='col-md-3 col-sm-3 col-xs-3'>
+            <h3 id='expenses'>0</h3>
+        </div>
+        <div class='col-md-3 col-sm-3 col-xs-3'>
+            <label><h3>Left: </h3></label>
+        </div>
+        <div class='col-md-3 col-sm-3 col-xs-3'>
+            <h3 id='left'>0</h3>
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div class='col-md-2 col-xs-6 col-sm-6'>
+            <a href="{% url 'lists:index' %}" class='btn btn-warning form-control'>Go back</a>
+        </div>
+        <div class='col-md-2 col-xs-6 col-sm-6'>
+            <input type="submit" class='btn btn-success form-control' value="Save changes"/>
+        </div>
 </form>
+</div>
 {% endblock %}

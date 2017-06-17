@@ -1,18 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Lists</h1>
-{% for list in object_list%}
-    <a href="{% url 'lists:detail' list.id %}">
-        <h2>List {{list.name}}</h2>
-    </a>
-    
-    <ul>
-    {% for item in list.item_set.all%}
-        <li>{{item.name}}</li>
-    {% endfor %}
-    </ul>
-
-{% endfor %}
-<a href="{% url 'lists:new_list' %}">Create new list</a>
+<div class='container-fluid'>
+    <div class='row'>
+        <h1>Lists</h1>
+    </div>
+    <table class='table table-condensed'>
+        <thead>
+            <tr>
+                <th>
+                    List name
+                </th>
+                <th>
+                    Budget
+                </th>
+                <th>
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for list in object_list%}
+                <tr>
+                    <td>
+                        <a href="{% url 'lists:detail' list.id %}">{{list.name}}</a>
+                    </td>
+                    <td>
+                        {{list.budget}}
+                    </td>
+                    <td>
+                        {{list.get_total}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'lists:new_list' %}" class='btn btn-info'>Create new list</a>
+</div>
 {% endblock %}
