@@ -21,6 +21,7 @@ from lists import views
 urlpatterns = [
     url(r'^user/(\w+)/$', views.profile),
     url(r'^login/$', views.login_view),
+    url(r'^/create_user/$', views.create_user),
     url(r'^logout/$', views.logout_view),
     url(r'^admin/', admin.site.urls),
     url(r'^lists/', include('lists.urls')),

@@ -17,18 +17,18 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     model = List
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
-    
+
     def get_queryset(self):
         user = self.request.user
         return List.objects.filter(user=user)
 
-        
+
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = List
     template_name = 'lists/detail.html'
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
-    
+
     def get_object(self):
         user = self.request.user
         pk = self.kwargs['pk']
@@ -53,7 +53,7 @@ def update(request, list_id):
 def new_list(request):
     form = ListForm
     return render(request, 'lists/new_list.html', {'form': form})
-    
+
 @login_required(login_url='/login/')
 def create_list(request):
     form = ListForm(request.POST)
@@ -70,7 +70,7 @@ def profile(request, username):
     return render(request, 'profile.html',
     {'username': username,
     'lists': lists})
-    
+
 def login_view(request):
     if request.user.is_authenticated():
         return profile(request, request.user.username)
@@ -86,13 +86,16 @@ def login_view(request):
                     return HttpResponseRedirect('/')
         return render(request, 'login.html', {'form': form, 'error_message': 'Wrong username or password'})
     else:
-        form = LoginForm()
-        return render(request, 'login.html', {'form': form})
-        
+        return redirect_to_login(request)
+
+def redirect_to_login(request):
+    form = LoginForm()
+    return render(request, 'login.html', {'form': form})
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
-    
+
 def save_item(request):
     list_id = int(request.POST.get('list_id', None))
     item_id = int(request.POST.get('item_id', None))
@@ -101,9 +104,9 @@ def save_item(request):
     item_price = int(request.POST.get('item_price', None))
 
     parent_list = List.objects.get(pk=list_id)
-    
+
     print item_id
-    
+
     if not item_id:
         new_item = Item(name=item_name, quantity=item_quantity, price=item_price, parent_list=parent_list)
         new_item.save()
@@ -116,3 +119,21 @@ def save_item(request):
         item_to_update.save()
 
     return HttpResponse("""{"item_id": %s}""" % item_id)
+
+def create_user(request):
+    print 'entering!'
+    if request.method is "POST":
+        print "post!"
+        new_username = request.POST['username']
+        new_password = request.POST['password']
+        new_email = request.POST['email']
+
+        new_user = User.objects.create_user(username=new_username,
+                                            password=new_password,
+                                            email=new_email)
+        new_user.save()
+
+        return redirect_to_login(request)
+    else:
+        print "other jeje"
+        return render(request, 'create_user.html')

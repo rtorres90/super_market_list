@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container-fluid">
+  {% if error_message %}
+  <div class="row">
+      <h2>{{error_message}}</h2>
+  </div>
+  {% endif %}
+  <div class="row">
+      <h1>Register</h1>
+  </div>
+    <form action="." method='POST'>
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-4 form-group">
+          <label for="username">User name: </label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Please provide an user name"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 form-group">
+          <label for="password">Password: </label>
+          <input type="password" id="password" name="password" class="form-control"/>
+        </div>
+        <div class="col-md-4 form-group">
+          <label for="password2">Confirm password: </label>
+          <input type="password" id="password2" name="password2" class="form-control"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 form-group">
+          <label for="email">Email: </label>
+          <input type="email" name=email placeholder="Please provide an email" class='form-control'/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 form-group">
+          <input type="submit" value="Create user" class="form-control btn btn-success"/>
+        </div
+      </div>
+    </form>
+</div>
+{% endblock %}
