@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class='container-fluid'>
-    {% if error_message %}
-    <div class='row'>
-        <p>
-            <strong>{{ error_message }}</strong>
-        </p>
+    <div class='container-fluid'>
+        {% if error_message %}
+            <div class='row'>
+                <p>
+                    <strong>{{ error_message }}</strong>
+                </p>
+            </div>
+        {% endif %}
+        <div class='row'>
+            <form action="{% url 'lists:create_list' %}" method='POST'>
+                {% csrf_token %}
+                {{ form }}
+                <a href="{% url 'lists:index' %}">Go to home</a>
+                <input type="submit" value="Create list"/>
+            </form>
+        </div>
     </div>
-    {% endif %}
-    <div class='row'>
-        <form action="{% url 'lists:create_list'%}" method='POST'>
-            {% csrf_token %}
-            {{ form }}
-            <a href="{% url 'lists:index' %}">Go to home</a>
-            <input type="submit" value="Create list"/>
-        </form>
-    </div>
-</div>
 {% endblock %}

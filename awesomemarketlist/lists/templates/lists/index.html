@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class='container-fluid'>
-    <div class='row'>
-        <h1>Lists</h1>
-    </div>
-    <table class='table table-condensed'>
-        <thead>
+    <div class='container-fluid'>
+        <div class='row'>
+            <h1>Lists</h1>
+        </div>
+        <table class='table table-condensed'>
+            <thead>
             <tr>
                 <th>
                     List name
@@ -18,23 +18,23 @@
                     Total
                 </th>
             </tr>
-        </thead>
-        <tbody>
-            {% for list in object_list%}
+            </thead>
+            <tbody>
+            {% for list in object_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'lists:detail' list.id %}">{{list.name}}</a>
+                        <a href="{% url 'lists:detail' list.id %}">{{ list.name }}</a>
                     </td>
                     <td>
-                        {{list.budget}}
+                        {{ list.budget }}
                     </td>
                     <td>
-                        {{list.get_total}}
+                        {{ list.get_total }}
                     </td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'lists:new_list' %}" class='btn btn-info'>Create new list</a>
-</div>
+            </tbody>
+        </table>
+        <a href="{% url 'lists:new_list' %}" class='btn btn-info'>Create new list</a>
+    </div>
 {% endblock %}

@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from .models import List, Tag, Item
 from .forms import ListForm, LoginForm
 
+
 class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'lists/index.html'
     model = List
@@ -34,6 +35,7 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         pk = self.kwargs['pk']
         return List.objects.get(user=user, pk=pk)
 
+
 @login_required(login_url='/login/')
 def update(request, list_id):
     list = get_object_or_404(List, pk=list_id)
@@ -49,10 +51,12 @@ def update(request, list_id):
         'error_message': error_message,
     })
 
+
 @login_required(login_url='/login/')
 def new_list(request):
     form = ListForm
     return render(request, 'lists/new_list.html', {'form': form})
+
 
 @login_required(login_url='/login/')
 def create_list(request):
@@ -63,13 +67,15 @@ def create_list(request):
         new_list.save()
     return HttpResponseRedirect(reverse('lists:index'))
 
+
 @login_required(login_url='/login/')
 def profile(request, username):
     user = User.objects.get(username=username)
     lists = List.objects.filter(user=user)
     return render(request, 'profile.html',
-    {'username': username,
-    'lists': lists})
+                  {'username': username,
+                   'lists': lists})
+
 
 def login_view(request):
     if request.user.is_authenticated():
@@ -88,13 +94,16 @@ def login_view(request):
     else:
         return redirect_to_login(request)
 
+
 def redirect_to_login(request):
     form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
+
 
 def save_item(request):
     list_id = int(request.POST.get('list_id', None))
@@ -120,13 +129,29 @@ def save_item(request):
 
     return HttpResponse("""{"item_id": %s}""" % item_id)
 
+
 def create_user(request):
-    print 'entering!'
-    if request.method is "POST":
-        print "post!"
+    if request.method == 'POST':
         new_username = request.POST['username']
+
+        try:
+            User.objects.get(username=new_username)
+            return redirect_to_create_user(request, 'The provided username is being used.')
+        except:
+            pass
+
         new_password = request.POST['password']
+        new_password2 = request.POST['password2']
+
+        if new_password != new_password2:
+            return redirect_to_create_user(request, 'The provided passwords are not the same.')
         new_email = request.POST['email']
+
+        try:
+            User.objects.get(email=new_email)
+            return redirect_to_create_user(request, 'The provided email is being used.')
+        except:
+            pass
 
         new_user = User.objects.create_user(username=new_username,
                                             password=new_password,
@@ -135,5 +160,8 @@ def create_user(request):
 
         return redirect_to_login(request)
     else:
-        print "other jeje"
         return render(request, 'create_user.html')
+
+
+def redirect_to_create_user(request, error_message):
+    return render(request, 'create_user.html', {'error_message': error_message})

@@ -11,4 +11,4 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
     url(r'^(?P<list_id>[0-9]+)/update/$', views.update, name='update'),
     url(r'^save_item/$', views.save_item, name='save_item'),
-    ]
+]
