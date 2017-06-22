@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from lists import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^user/(\w+)/$', views.profile, name='profile'),
@@ -27,3 +28,5 @@ urlpatterns = [
     url(r'^lists/', include('lists.urls')),
     url(r'^$', views.IndexView.as_view()),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

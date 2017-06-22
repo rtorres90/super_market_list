@@ -16,6 +16,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.provision "shell", path: "prov.sh"
 
 	if File.directory?(File.expand_path("../../super_market_list"))
-    	config.vm.synced_folder "../../super_market_list", "/home/vagrant/super_market_list"
+    	config.vm.synced_folder "../../super_market_list", "/var/www/awesomemarketlist"
   	end
 end
