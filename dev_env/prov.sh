@@ -9,6 +9,8 @@ sudo apt-get -o Dpkg::Options::="--force-confnew" -y install libffi-dev
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install libssl-dev
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install libmysqlclient-dev
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install supervisor
+sudo apt-get -o Dpkg::Options::="--force-confnew" -y install apache
+sudo apt-get -o Dpkg::Options::="--force-confnew" -y install libapache2-mod-wsgi
 
 # Installing mysql
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password dev_env'
