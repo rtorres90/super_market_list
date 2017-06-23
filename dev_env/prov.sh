@@ -44,8 +44,8 @@ default-character-set = utf8
 
 EOL
 
-$VIRTUALENV_PATH//bin/python $PROJECT_PATH/manage.py migrate
-$VIRTUALENV_PATH//bin/python $PROJECT_PATH/manage.py collectstatic
+$VIRTUALENV_PATH/bin/python $PROJECT_PATH/manage.py migrate
+$VIRTUALENV_PATH/bin/python $PROJECT_PATH/manage.py collectstatic
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'supersecretpass')" | $VIRTUALENV_PATH/bin/python $PROJECT_PATH/manage.py shell
 
 
