@@ -17,5 +17,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	if File.directory?(File.expand_path("../../super_market_list"))
     	config.vm.synced_folder "../../super_market_list/awesomemarketlist", "/home/vagrant/awesomemarketlist"
+    	config.vm.synced_folder "../../super_market_list/dev_env/templates", "/home/vagrant/templates"
   	end
 end
