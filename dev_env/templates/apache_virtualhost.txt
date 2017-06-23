@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+    Alias /static ${PROJECT_PATH}/static
+    ErrorLog /home/vagrant/apache_errors.log
+    <Directory ${PROJECT_PATH}/static>
+        Require all granted
+    </Directory>
+
+    <Directory ${PROJECT_PATH}/${PROJECT_NAME}>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    WSGIDaemonProcess ${PROJECT_NAME} python-path=${PROJECT_PATH} python-home=${VIRTUALENV_PATH}
+    WSGIProcessGroup ${PROJECT_NAME}
+    WSGIScriptAlias / ${PROJECT_PATH}/${PROJECT_NAME}/wsgi.py
+</VirtualHost>
