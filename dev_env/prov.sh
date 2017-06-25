@@ -16,6 +16,7 @@ DATABASE_PASS="dev_env"
 #Installing dependencies.
 sudo apt-get update
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install python-pip
+sudo apt-get -o Dpkg::Options::="--force-confnew" -y install git
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install python-virtualenv
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install python-dev
 sudo apt-get -o Dpkg::Options::="--force-confnew" -y install libffi-dev

@@ -38,7 +38,7 @@ class List(models.Model):
             self.item_set.create(name=item.name, quantity=item.quantity, price=item.price)
 
     def clone_list(self):
-        new_list = List(name=self.name, budget=self.budget, tag=self.tag)
+        new_list = List(name=self.name, budget=self.budget, tag=self.tag, user=self.user)
         new_list.save()
         for item in self.item_set.all():
             new_list.add_item(item_name=item.name, quantity=item.quantity, price=item.price)

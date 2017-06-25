@@ -1,6 +1,7 @@
 from string import ascii_lowercase
-from django.test import TestCase
+from django.test import TestCase, Client
 from random import sample, randint
+from django.contrib.auth.models import User
 
 from .models import Tag, List, Item
 
@@ -16,10 +17,18 @@ def get_random_tag():
     return tag
 
 
+def get_random_user():
+    random_name = get_random_string(5)
+    user = User.objects.create_superuser(random_name, 'test@gmail.com', 'test')
+    user.save()
+    return user
+
+
 def get_random_list():
     tag = get_random_tag()
+    user = get_random_user()
     random_name = get_random_string(5)
-    temp_list = List(name=random_name, tag=tag)
+    temp_list = List(name=random_name, tag=tag, user=user)
     temp_list.save()
     return temp_list
 
@@ -77,7 +86,6 @@ class ListMethodTests(TestCase):
         self.assertEqual(list1.get_total(), list2.get_total())
         self.assertEqual(len(list1.item_set.all()), len(list1.item_set.all()))
 
-
 class ItemMethodTests(TestCase):
     def test_item_rename_item(self):
         item = get_random_item()
@@ -100,3 +108,21 @@ class ItemMethodTests(TestCase):
         self.assertEqual(item.name, item2.name)
         self.assertEqual(item.quantity, item2.quantity)
         self.assertEqual(item.price, item2.price)
+
+class ListLoginViewTest(TestCase):
+
+    def test_access_with_correct_credentials(self):
+        c = Client()
+        response = c.post('/login/', {'username': 'test', 'password': 'test'})
+
+        response = c.get("/lists/")
+        self.assertIn("Create new list", response.content)
+
+
+
+    def test_access_with_wrong_credentials(self):
+        c = Client()
+        response = c.post('/login/', {'username': 'wrong', 'password': 'test'})
+
+        response = c.get("/lists/")
+        self.assertNotIn("Create new list", response.content)
